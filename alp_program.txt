@@ -1,0 +1,6 @@
+MOV A, 5
+ADD B, A
+SUB C, B
+MUL D, C
+DIV E, D
+HLT

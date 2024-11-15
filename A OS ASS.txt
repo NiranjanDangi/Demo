@@ -1,0 +1,1811 @@
+
+Sum of digit=======================================================================
+
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "Please provide a number as a command-line argument."
+    exit 1
+fi
+
+
+number=$1
+
+sum=0
+
+
+while [ $number -gt 0 ]; do
+    digit=$((number % 10))
+    
+    sum=$((sum + digit))
+    
+    number=$((number / 10))
+done
+
+echo "The sum of the digits is: $sum"
+
+
+
+
+function avg, max, min ============================================================
+
+#!/bin/bash
+
+
+average() {
+    echo "Enter numbers separated by spaces:"
+    read -a numbers
+
+    sum=0
+    count=${#numbers[@]}
+
+    for num in "${numbers[@]}"; do
+        sum=$((sum + num))
+    done
+
+    avg=$(echo "scale=2; $sum / $count" | bc)
+    echo "The average is: $avg"
+}
+
+
+max_number() {
+    echo "Enter numbers separated by spaces:"
+    read -a numbers
+
+    max=${numbers[0]}
+
+    for num in "${numbers[@]}"; do
+        if [ $num -gt $max ]; then
+            max=$num
+        fi
+    done
+
+    echo "The maximum number is: $max"
+}
+
+
+min_number() {
+    echo "Enter numbers separated by spaces:"
+    read -a numbers
+
+    min=${numbers[0]}
+
+    for num in "${numbers[@]}"; do
+        if [ $num -lt $min ]; then
+            min=$num
+        fi
+    done
+
+    echo "The minimum number is: $min"
+}
+
+
+echo "Choose an option:"
+echo "1) Calculate average of given numbers"
+echo "2) Find maximum number from given numbers"
+echo "3) Find minimum number from given numbers"
+read choice
+
+case $choice in
+    1)
+        average
+        ;;
+    2)
+        max_number
+        ;;
+    3)
+        min_number
+        ;;
+    *)
+        echo "Invalid option. Please select 1, 2, or 3."
+        ;;
+esac
+
+
+
+bubble sort =======================================================================
+
+#!/bin/bash
+
+
+bubble_sort() {
+    local array=("$@")
+    local n=${#array[@]}
+    local temp
+
+    for ((i = 0; i < n-1; i++)); do
+        for ((j = 0; j < n-i-1; j++)); do
+            if [ "${array[j]}" -gt "${array[j+1]}" ]; then
+                # Swap array[j] and array[j+1]
+                temp=${array[j]}
+                array[j]=${array[j+1]}
+                array[j+1]=$temp
+            fi
+        done
+    done
+
+    echo "Sorted array: ${array[@]}"
+}
+
+
+echo "Enter numbers separated by spaces:"
+read -a numbers
+
+
+bubble_sort "${numbers[@]}"
+
+
+factorial with and without recursion===============================================
+
+#!/bin/bash
+
+# Function to calculate factorial without recursion
+factorial_non_recursive() {
+    local number=$1
+    local result=1
+
+    for ((i = 1; i <= number; i++)); do
+        result=$((result * i))
+    done
+
+    echo "Factorial of $number (non-recursive) is: $result"
+}
+
+# Read a number from the user
+echo "Enter a number to find its factorial (non-recursive):"
+read number
+
+# Call the non-recursive factorial function with the user-provided number
+factorial_non_recursive $number
+
+
+
+#!/bin/bash
+
+# Function to calculate factorial with recursion
+factorial_recursive() {
+    local number=$1
+
+    if [ $number -le 1 ]; then
+        echo 1
+    else
+        local temp=$((number - 1))
+        local result=$(factorial_recursive $temp)
+        echo $((number * result))
+    fi
+}
+
+# Read a number from the user
+echo "Enter a number to find its factorial (recursive):"
+read number
+
+# Call the recursive factorial function and print the result
+result=$(factorial_recursive $number)
+echo "Factorial of $number (recursive) is: $result"
+
+
+
+
+file permission ===================================================================
+
+#!/bin/bash
+
+
+check_file() {
+    if [ -z "$1" ]; then
+        echo "Usage: $0 <filename>"
+        exit 1
+    fi
+
+    filename="$1"
+
+    if [ -e "$filename" ]; then
+        echo "File: $filename"
+        echo "File Type:"
+        file "$filename"
+        echo "Permissions:"
+        ls -l "$filename" | awk '{print $1 " " $3 " " $4}'
+    else
+        echo "File does not exist."
+    fi
+}
+
+
+echo "Enter the filename:"
+read filename
+
+
+check_file "$filename"
+
+
+palindrome or not=================================================================
+
+#!/bin/bash
+
+
+check_palindrome() {
+    input="$1"
+    reversed=$(echo "$input" | rev)
+
+    if [ "$input" = "$reversed" ]; then
+        echo "$input is a palindrome."
+    else
+        echo "$input is not a palindrome."
+    fi
+}
+
+
+echo "Enter a string:"
+read string
+
+
+check_palindrome "$string"
+
+
+System calls=============================================================================
+
+#include <iostream>
+#include <fstream>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <cstring>
+
+// Function prototypes
+void processRelatedSyscalls();
+void fileRelatedSyscalls();
+void communicationSyscalls();
+void informationRelatedSyscalls();
+
+int main() {
+    int choice;
+
+    while (true) {
+        std::cout << "\n--- System Calls Menu ---\n";
+        std::cout << "1. Process-related system calls\n";
+        std::cout << "2. File-related system calls\n";
+        std::cout << "3. Communication system calls\n";
+        std::cout << "4. Information-related system calls\n";
+        std::cout << "5. Exit\n";
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1:
+                processRelatedSyscalls();
+                break;
+            case 2:
+                fileRelatedSyscalls();
+                break;
+            case 3:
+                communicationSyscalls();
+                break;
+            case 4:
+                informationRelatedSyscalls();
+                break;
+            case 5:
+                return 0;
+            default:
+                std::cout << "Invalid choice, please try again.\n";
+        }
+    }
+
+    return 0;
+}
+
+// Function to demonstrate process-related system calls
+void processRelatedSyscalls() {
+    pid_t pid = fork();
+
+    if (pid == 0) { // Child process
+        std::cout << "Child process with PID: " << getpid() << std::endl;
+        exit(0); // Use exit system call
+    } else if (pid > 0) { // Parent process
+        std::cout << "Parent process with PID: " << getpid() << std::endl;
+        wait(nullptr); // Use wait system call
+        std::cout << "Child process has terminated.\n";
+    } else {
+        perror("fork");
+    }
+}
+
+// Function to demonstrate file-related system calls
+void fileRelatedSyscalls() {
+    int fd;
+    char buffer[100];
+
+    // Open a file
+    fd = open("example.txt", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+    if (fd == -1) {
+        perror("open");
+        return;
+    }
+
+    // Write to the file
+    if (write(fd, "Hello, World!\n", 14) == -1) {
+        perror("write");
+    }
+
+    // Reset file offset
+    lseek(fd, 0, SEEK_SET);
+
+    // Read from the file
+    if (read(fd, buffer, 100) == -1) {
+        perror("read");
+    } else {
+        std::cout << "Read from file: " << buffer;
+    }
+
+    // Close the file
+    if (close(fd) == -1) {
+        perror("close");
+    }
+
+    // Link and unlink demonstration
+    if (link("example.txt", "example_link.txt") == -1) {
+        perror("link");
+    } else {
+        std::cout << "File linked successfully.\n";
+    }
+
+    if (unlink("example_link.txt") == -1) {
+        perror("unlink");
+    } else {
+        std::cout << "File unlinked successfully.\n";
+    }
+
+    // Stat demonstration
+    struct stat fileStat;
+    if (stat("example.txt", &fileStat) < 0) {
+        perror("stat");
+    } else {
+        std::cout << "File size: " << fileStat.st_size << " bytes\n";
+    }
+}
+
+// Function to demonstrate communication system calls
+void communicationSyscalls() {
+    int fd[2];
+    pid_t pid;
+    const char write_msg[] = "Hello from the pipe!";
+    char read_msg[100];
+
+    // Create a pipe
+    if (pipe(fd) == -1) {
+        perror("pipe");
+        return;
+    }
+
+    pid = fork();
+
+    if (pid == 0) { // Child process
+        close(fd[0]); // Close unused read end
+        write(fd[1], write_msg, strlen(write_msg) + 1);
+        close(fd[1]); // Close write end
+        exit(0);
+    } else if (pid > 0) { // Parent process
+        wait(nullptr); // Wait for child process
+        close(fd[1]); // Close unused write end
+        read(fd[0], read_msg, sizeof(read_msg));
+        std::cout << "Parent read from pipe: " << read_msg << std::endl;
+        close(fd[0]); // Close read end
+    } else {
+        perror("fork");
+    }
+}
+
+// Function to demonstrate information-related system calls
+void informationRelatedSyscalls() {
+    pid_t pid = getpid();
+    std::cout << "Current process ID: " << pid << std::endl;
+
+    pid_t ppid = getppid();
+    std::cout << "Parent process ID: " << ppid << std::endl;
+
+    uid_t uid = getuid();
+    std::cout << "User ID: " << uid << std::endl;
+
+    gid_t gid = getgid();
+    std::cout << "Group ID: " << gid << std::endl;
+}
+
+
+
+
+
+Matrix===================================================================================================================================================================
+
+#include <iostream>
+#include <vector>
+#include <thread>
+
+using namespace std;
+
+#define MAX 4
+
+int A[MAX][MAX];
+int B[MAX][MAX];
+int C[MAX][MAX];  // Used for both addition and subtraction results
+int D[MAX][MAX];  // Used for multiplication results
+
+struct threadData {
+    int row, col;
+};
+
+void add(threadData data) {
+    C[data.row][data.col] = A[data.row][data.col] + B[data.row][data.col];
+}
+
+void sub(threadData data) {
+    C[data.row][data.col] = A[data.row][data.col] - B[data.row][data.col];
+}
+
+void mul(threadData data) {
+    int sum = 0;
+    for (int i = 0; i < MAX; i++) {
+        sum += A[data.row][i] * B[i][data.col];
+    }
+    D[data.row][data.col] = sum;
+}
+
+void initMat() {
+    for (int i = 0; i < MAX; i++) {
+        for (int j = 0; j < MAX; j++) {
+            A[i][j] = i + j + 1;
+            B[i][j] = i * j + 1;
+        }
+    }
+}
+
+template <typename FUNC>
+void operation(FUNC op) {
+    vector<thread> threads;
+    for (int i = 0; i < MAX; i++) {
+        for (int j = 0; j < MAX; j++) {
+            // Pass threadData by value to avoid data races
+            threads.emplace_back(op, threadData{i, j});
+        }
+    }
+    for (auto &it : threads) it.join();
+}
+
+void printmat(int mat[MAX][MAX], const string &label) {
+    cout << label << " operation:" << endl;
+    for (int i = 0; i < MAX; i++) {
+        for (int j = 0; j < MAX; j++) {
+            cout << mat[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
+int main() {
+    initMat();
+    
+    operation(add);
+    printmat(C, "Addition");
+
+    operation(sub);
+    printmat(C, "Subtraction");
+
+    operation(mul);
+    printmat(D, "Multiplication");
+
+    return 0;
+}
+
+
+ReaderWriter===============================================================================================================================================================
+
+#include<iostream>
+#include<thread>
+#include<semaphore.h>
+#include<mutex>
+
+using namespace std;
+
+sem_t resourceSem;
+mutex readerMut;
+int readerCount = 0;
+int sharedResource = 0;
+
+void reader(int id)
+{
+	while(true)
+	{
+		{
+			lock_guard<mutex> lock(readerMut);
+			readerCount++;
+			if(readerCount == 1)
+			{
+				sem_wait(&resourceSem);
+			}
+		}
+		
+		cout << "reader : " << id << " resource : " << sharedResource << endl;
+		
+		{
+			lock_guard<mutex> lock(readerMut);
+			readerCount--;
+			if(readerCount == 0)
+			{
+				sem_post(&resourceSem);
+			}
+		}
+	}
+}
+
+void writer(int id)
+{
+	while(true)
+	{
+		sem_wait(&resourceSem);
+		
+		sharedResource++;
+		
+		cout << "writer : " << id << " resource : " << sharedResource << endl;
+		
+		sem_post(&resourceSem);
+	}
+}
+
+int main()
+{
+	sem_init(&resourceSem, 0, 1);
+	
+	thread readers[3], writers[2];
+	for(int i = 0; i < 3; i++)
+	{
+		readers[i] = thread(reader, i + 1);
+	}
+	
+	for(int i = 0; i < 2; i++)
+	{
+		writers[i] = thread(writer, i + 1);
+	}
+	
+	
+	for(auto &read : readers) read.join();
+	for(auto &write : writers) write.join();
+	
+	sem_destroy(&resourceSem);
+}
+
+
+ProducerConsumer===========================================================================================================================================================
+
+#include<iostream>
+#include<unistd.h>
+#include<thread>
+#include<semaphore.h>
+#include<mutex>
+#include<cstdlib>
+
+using namespace std;
+
+const int BUFFERSIZE = 5;
+int buffer[BUFFERSIZE];
+
+int count, in, out = 0;
+
+mutex bufMut;
+sem_t notEmpty;
+sem_t notFull;
+
+int producer(int id)
+{
+	while(true)
+	{
+		int item = rand() % 100;
+		sem_wait(&notFull);
+		{
+		 	lock_guard<mutex> lock(bufMut);
+		 	buffer[in] = item;
+		 	in = (in - 1) % BUFFERSIZE;
+		 	count++;
+		 	cout << "producer : " << id << "resource : " << item << endl;
+		 
+		 
+		}
+		sem_post(&notEmpty);
+	}
+}
+int consumer(int id)
+{
+	while(true)
+	{
+		sem_wait(&notEmpty);
+		
+		int item;
+		{
+			lock_guard<mutex> lock(bufMut);
+			item = buffer[out];
+			out = (out - 1) % BUFFERSIZE;
+			count--;
+			cout << "consumer : " << id << " resource : " << item << endl;
+		}
+		
+		sem_post(&notFull);
+	}
+}
+int main()
+{
+	sem_init(&notEmpty, 0, BUFFERSIZE);
+	sem_init(&notFull, 0, 0);
+	
+	thread producers[2] = {thread(producer, 1), thread(producer, 2)};
+	thread consumers[2] = {thread(consumer, 1), thread(consumer, 2)};
+	
+	for(auto &prod : producers) prod.join();
+	for(auto &con : consumers) con.join();
+	
+	sem_destroy(&notEmpty);
+	sem_destroy(&notFull);
+}
+
+
+
+
+
+
+
+Dining Philosopher ========================================================================================================================================================
+
+#include<iostream>
+#include<thread>
+#include<mutex>
+#include<semaphore.h>
+#include<unistd.h>
+#include<vector>
+
+using namespace std;
+
+mutex mut;
+const int PHIL = 5;
+sem_t sem[PHIL];
+
+void philosopher(int id)
+{
+	while(true)
+	{
+		{
+			lock_guard<mutex> lock(mut);
+			cout << "philosopher : " << id << " is eating " << endl;
+		}
+		
+		sem_wait(&sem[id]);
+		sem_wait(&sem[(id + 1) % PHIL]);
+		
+		{
+			lock_guard<mutex> lock(mut);
+			cout << "philosopher : " << id << " is thinking " << endl;
+		}
+		
+		sem_post(&sem[id]);
+		sem_post(&sem[(id + 1) % PHIL]);
+	}
+}
+int main()
+{
+	for(int i = 0; i < PHIL; i++)
+	{
+		sem_init(&sem[i], 0, 1);
+	}
+	
+	vector<thread> philos;
+	for(int i = 0; i < PHIL; i++)
+	{
+		philos.push_back(thread(philosopher, i));
+	}
+	
+	for(auto &ph : philos) ph.join();
+	
+	for(int i = 0; i < PHIL; i++)
+	{
+		sem_destroy(&sem[i]);
+	}
+
+}
+
+
+scheduling algorithms======================================================================================================================================================
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+struct Process {
+    int pid, burst_time, arrival_time, priority, remaining_time, finish_time, turnaround_time, waiting_time;
+};
+
+void calculate_times(vector<Process>& p) {
+    for (auto& proc : p) {
+        proc.turnaround_time = proc.finish_time - proc.arrival_time;
+        proc.waiting_time = proc.turnaround_time - proc.burst_time;
+    }
+}
+
+void print_times(const vector<Process>& p) {
+    cout << "PID\tArrival\tBurst\tFinish\tTurnaround\tWaiting\n";
+    for (const auto& proc : p) {
+        cout << proc.pid << "\t" << proc.arrival_time << "\t" << proc.burst_time << "\t"
+             << proc.finish_time << "\t" << proc.turnaround_time << "\t\t" << proc.waiting_time << endl;
+    }
+}
+
+// First Come First Serve (FCFS)
+void fcfs(vector<Process>& p) {
+    cout << "\nFCFS Scheduling: ";
+    sort(p.begin(), p.end(), [](const Process& a, const Process& b) {
+        return a.arrival_time < b.arrival_time;
+    });
+    int time = 0;
+    for (auto& proc : p) {
+        proc.finish_time = max(time, proc.arrival_time) + proc.burst_time;
+        time = proc.finish_time;
+        cout << "P" << proc.pid << " ";
+    }
+    cout << endl;
+    calculate_times(p);
+}
+
+// Shortest Job First (Non-Preemptive)
+void sjf_non_preemptive(vector<Process>& p) {
+    cout << "\nSJF (Non-Preemptive) Scheduling: ";
+    int time = 0;
+    vector<bool> finished(p.size(), false);
+    while (true) {
+        int min_index = -1;
+        for (size_t i = 0; i < p.size(); ++i) {
+            if (!finished[i] && p[i].arrival_time <= time) {
+                if (min_index == -1 || p[i].burst_time < p[min_index].burst_time) {
+                    min_index = i;
+                }
+            }
+        }
+        if (min_index == -1) break;
+
+        time += p[min_index].burst_time;
+        p[min_index].finish_time = time;
+        finished[min_index] = true;
+        cout << "P" << p[min_index].pid << " ";
+    }
+    cout << endl;
+    calculate_times(p);
+}
+
+// Shortest Job First (Preemptive)
+void sjf_preemptive(vector<Process>& p) {
+    cout << "\nSJF (Preemptive) Scheduling: ";
+    int time = 0;
+    vector<bool> finished(p.size(), false);
+    while (true) {
+        int min_index = -1;
+        for (size_t i = 0; i < p.size(); ++i) {
+            if (!finished[i] && p[i].arrival_time <= time && p[i].remaining_time > 0) {
+                if (min_index == -1 || p[i].remaining_time < p[min_index].remaining_time) {
+                    min_index = i;
+                }
+            }
+        }
+        if (min_index == -1) break;
+
+        cout << "P" << p[min_index].pid << " ";
+        p[min_index].remaining_time--;
+        time++;
+        if (p[min_index].remaining_time == 0) {
+            p[min_index].finish_time = time;
+            finished[min_index] = true;
+        }
+    }
+    cout << endl;
+    calculate_times(p);
+}
+
+// Priority Scheduling (Non-Preemptive)
+void priority_non_preemptive(vector<Process>& p) {
+    cout << "\nPriority Scheduling (Non-Preemptive): ";
+    int time = 0;
+    vector<bool> finished(p.size(), false);
+    while (true) {
+        int min_index = -1;
+        for (size_t i = 0; i < p.size(); ++i) {
+            if (!finished[i] && p[i].arrival_time <= time) {
+                if (min_index == -1 || p[i].priority < p[min_index].priority) {
+                    min_index = i;
+                }
+            }
+        }
+        if (min_index == -1) break;
+
+        time += p[min_index].burst_time;
+        p[min_index].finish_time = time;
+        finished[min_index] = true;
+        cout << "P" << p[min_index].pid << " ";
+    }
+    cout << endl;
+    calculate_times(p);
+}
+
+// Round Robin Scheduling
+void round_robin(vector<Process>& p, int quantum) {
+    cout << "\nRound Robin Scheduling: ";
+    int time = 0, completed = 0;
+    vector<int> remaining_time(p.size());
+    for (size_t i = 0; i < p.size(); ++i) remaining_time[i] = p[i].burst_time;
+
+    while (completed < p.size()) {
+        for (size_t i = 0; i < p.size(); ++i) {
+            if (remaining_time[i] > 0 && p[i].arrival_time <= time) {
+                cout << "P" << p[i].pid << " ";
+                if (remaining_time[i] > quantum) {
+                    time += quantum;
+                    remaining_time[i] -= quantum;
+                } else {
+                    time += remaining_time[i];
+                    remaining_time[i] = 0;
+                    p[i].finish_time = time;
+                    completed++;
+                }
+            }
+        }
+    }
+    cout << endl;
+    calculate_times(p);
+}
+
+// Priority Scheduling (Preemptive)
+void priority_preemptive(vector<Process>& p) {
+    cout << "\nPriority Scheduling (Preemptive): ";
+    int time = 0;
+    vector<bool> finished(p.size(), false);
+    while (true) {
+        int min_index = -1;
+        for (size_t i = 0; i < p.size(); ++i) {
+            if (!finished[i] && p[i].arrival_time <= time && p[i].remaining_time > 0) {
+                if (min_index == -1 || p[i].priority < p[min_index].priority) {
+                    min_index = i;
+                }
+            }
+        }
+        if (min_index == -1) break;
+
+        cout << "P" << p[min_index].pid << " ";
+        p[min_index].remaining_time--;
+        time++;
+        if (p[min_index].remaining_time == 0) {
+            p[min_index].finish_time = time;
+            finished[min_index] = true;
+        }
+    }
+    cout << endl;
+    calculate_times(p);
+}
+
+int main() {
+    vector<Process> p = {
+        {1, 6, 0, 1, 6, 0, 0, 0},
+        {2, 8, 1, 3, 8, 0, 0, 0},
+        {3, 7, 2, 2, 7, 0, 0, 0},
+        {4, 3, 3, 4, 3, 0, 0, 0},
+    };
+
+    // Call each scheduling algorithm
+    fcfs(p);
+    print_times(p);
+
+    sjf_non_preemptive(p);
+    print_times(p);
+
+    sjf_preemptive(p);
+    print_times(p);
+
+    priority_non_preemptive(p);
+    print_times(p);
+
+    priority_preemptive(p);
+    print_times(p);
+
+    round_robin(p, 2);  // Quantum of 2
+    print_times(p);
+
+    return 0;
+}
+
+
+bankers====================================================================================================================================================================
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n = 5; // Number of processes
+    int m = 3; // Number of resources
+    int alloc[5][3] = {{0, 1, 0}, {2, 0, 0}, {3, 0, 2}, {2, 1, 1}, {0, 0, 2}};
+    int max[5][3] = {{7, 5, 3}, {3, 2, 2}, {9, 0, 2}, {2, 2, 2}, {4, 3, 3}};
+    int avail[3] = {3, 3, 2}; // Available resources
+
+    int f[n] = {0}, ans[n], need[n][m];
+
+    // Calculating the Need matrix
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++)
+            need[i][j] = max[i][j] - alloc[i][j];
+
+    // Display Allocation Matrix
+    cout << "Allocated Matrix:\n";
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++)
+            cout << alloc[i][j] << " ";
+        cout << endl;
+    }
+
+    // Display Max Matrix
+    cout << "\nMax Matrix:\n";
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++)
+            cout << max[i][j] << " ";
+        cout << endl;
+    }
+
+    // Display Need Matrix
+    cout << "\nNeed Matrix:\n";
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++)
+            cout << need[i][j] << " ";
+        cout << endl;
+    }
+
+    cout << "\nAvailable resources: ";
+    for (int i = 0; i < m; i++)
+        cout << avail[i] << " ";
+    cout << endl;
+
+    // Banker's Algorithm
+    int ind = 0;
+    bool safe = true;
+    for (int k = 0; k < n; k++) {
+        bool allocated = false;
+        for (int i = 0; i < n; i++) {
+            if (f[i] == 0) {
+                bool canAllocate = true;
+                for (int j = 0; j < m; j++) {
+                    if (need[i][j] > avail[j]) {
+                        canAllocate = false;
+                        break;
+                    }
+                }
+
+                if (canAllocate) {
+                    ans[ind++] = i;
+                    cout << "\nResources allocated to P" << i;
+                    for (int y = 0; y < m; y++)
+                        avail[y] += alloc[i][y];
+                    f[i] = 1;
+                    allocated = true;
+                }
+            }
+        }
+
+        if (!allocated) {
+            safe = false;
+            cout << "\nThe system is not in a safe state.\n";
+            break;
+        }
+    }
+
+    if (safe) {
+        cout << "\nThe system is in a SAFE state.\nSafe sequence: ";
+        for (int i = 0; i < n - 1; i++)
+            cout << "P" << ans[i] << " -> ";
+        cout << "P" << ans[n - 1] << endl;
+    }
+
+    return 0;
+}
+
+
+
+detect deadlock============================================================================================================================================================
+
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+bool detectDead(vector<vector<int>> &alloc, vector<vector<int>> request, vector<int> avail)
+{
+	int process = alloc.size();
+	int resources = avail.size();
+	
+	vector<bool> finish(process, false);
+	
+	while(true)
+	{
+		bool anyFinish = false;
+		
+		for(int i = 0; i < process; i++)
+		{
+			if(!finish[i])
+			{
+				bool canFinish = true;
+				
+				for(int j = 0; j < resources; j++)
+				{
+					if(request[i][j] > avail[i])
+					{
+						canFinish = false;
+						break;
+					}
+				}
+				
+				if(canFinish)
+				{
+					for(int j = 0; j < resources; j++)
+					{
+					 	avail[i] = alloc[i][j];
+					 	anyFinish = true;
+					 	finish[i] = true;
+					}
+				}
+			}
+			
+		}
+		
+		if(!anyFinish)
+		{break;}
+	}
+	
+	for(bool f : finish)
+	{
+		if(!f) return true;
+	}
+	
+	return false;
+}
+
+int main()
+{
+	vector<vector<int>> alloc = {
+        {0, 1, 0},
+        {2, 0, 0},
+        {3, 0, 2},
+        {2, 1, 1},
+        {0, 0, 2}
+    };
+    
+    	vector<vector<int>> request = {
+        {0, 0, 0},
+        {2, 0, 2},
+        {0, 0, 0},
+        {1, 0, 0},
+        {0, 0, 2}
+    };
+    
+    	vector<int> avail = {0, 0, 0};
+    	
+    	if(detectDead(alloc, request, avail))
+    	{
+    		cout << "detected deadlock" << endl;
+    	}
+    	else
+    	{
+    		cout << "no detected deadlock" << endl;
+    	}
+    	
+	return 0;	
+}
+
+
+
+lru, fifo, optimal ========================================================================================================================================================
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <climits>
+using namespace std;
+
+int FCFS(const vector<int>& requests, int head) {
+    int seek_time = 0;
+    cout << "FCFS\nSequence of requests: ";
+    for (int r : requests) {
+        cout << r << " ";
+        seek_time += abs(r - head);
+        head = r;
+    }
+    cout << "\nTotal Seek Time: " << seek_time << "\n\n";
+    return seek_time;
+}
+
+int SSTF(vector<int>& requests, int head) {
+    int seek_time = 0;
+    vector<bool> visited(requests.size(), false);
+    cout << "SSTF\nSequence of requests: ";
+
+    for (int count = 0; count < requests.size(); ++count) {
+        int closest = -1, min_dist = INT_MAX;
+        for (int i = 0; i < requests.size(); ++i) {
+            if (!visited[i] && abs(requests[i] - head) < min_dist) {
+                min_dist = abs(requests[i] - head);
+                closest = i;
+            }
+        }
+        visited[closest] = true;
+        cout << requests[closest] << " ";
+        seek_time += min_dist;
+        head = requests[closest];
+    }
+    cout << "\nTotal Seek Time: " << seek_time << "\n\n";
+    return seek_time;
+}
+
+int SCAN(vector<int>& requests, int head) {
+    int seek_time = 0;
+    sort(requests.begin(), requests.end());
+    cout << "SCAN\nSequence of requests: ";
+    
+    auto it = lower_bound(requests.begin(), requests.end(), head);
+    for (auto i = it; i != requests.end(); ++i) {
+        cout << *i << " ";
+        seek_time += abs(*i - head);
+        head = *i;
+    }
+    for (auto i = it - 1; i >= requests.begin(); --i) {
+        cout << *i << " ";
+        seek_time += abs(*i - head);
+        head = *i;
+    }
+    cout << "\nTotal Seek Time: " << seek_time << "\n\n";
+    return seek_time;
+}
+
+int CSCAN(vector<int>& requests, int head) {
+    int seek_time = 0;
+    sort(requests.begin(), requests.end());
+    cout << "C-SCAN\nSequence of requests: ";
+
+    auto it = lower_bound(requests.begin(), requests.end(), head);
+    for (auto i = it; i != requests.end(); ++i) {
+        cout << *i << " ";
+        seek_time += abs(*i - head);
+        head = *i;
+    }
+    for (auto i = requests.begin(); i != it; ++i) {
+        cout << *i << " ";
+        seek_time += abs(*i - head);
+        head = *i;
+    }
+    cout << "\nTotal Seek Time: " << seek_time << "\n\n";
+    return seek_time;
+}
+
+int main() {
+    int disk_size = 200;
+    int head = 50;
+    vector<int> requests = {95, 180, 34, 119, 11, 123, 62, 64};
+
+    FCFS(requests, head);
+    SSTF(requests, head);
+    SCAN(requests, head);
+    CSCAN(requests, head);
+
+    return 0;
+}
+
+
+
+Zombie process ============================================================================================================================================================
+
+#include <iostream>
+#include <unistd.h>
+#include <sys/wait.h>
+
+using namespace std;
+
+void createZombieProcess() {
+    pid_t pid = fork();
+    if (pid < 0) {
+        perror("Fork failed");
+        exit(1);
+    }
+    if (pid > 0) {  // Parent process
+        cout << "Parent process: Zombie process created. PID = " << pid << endl;
+        sleep(10);
+    } else {  // Child process
+        cout << "Child process exiting to become zombie." << endl;
+        exit(0);
+    }
+}
+
+void createOrphanProcess() {
+    pid_t pid = fork();
+    if (pid < 0) {
+        perror("Fork failed");
+        exit(1);
+    }
+    if (pid > 0) {  // Parent process
+        cout << "Parent process exiting to create orphan process." << endl;
+        exit(0);
+    } else {  // Child process
+        sleep(5);
+        cout << "Child process (orphan) continuing after parent termination. PID = " << getpid() << endl;
+    }
+}
+
+void sumEvenOdd(const int arr[], int size) {
+    pid_t pid = fork();
+    if (pid < 0) {
+        perror("Fork failed");
+        exit(1);
+    }
+    if (pid > 0) {  // Parent process
+        int evenSum = 0;
+        for (int i = 0; i < size; i++) if (arr[i] % 2 == 0) evenSum += arr[i];
+        cout << "Parent process: Sum of even numbers = " << evenSum << endl;
+        wait(nullptr);
+    } else {  // Child process
+        int oddSum = 0;
+        for (int i = 0; i < size; i++) if (arr[i] % 2 != 0) oddSum += arr[i];
+        cout << "Child process: Sum of odd numbers = " << oddSum << endl;
+        exit(0);
+    }
+}
+
+int main() {
+    int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int size = sizeof(arr) / sizeof(arr[0]);
+
+    cout << "Calculating sum of even and odd numbers:" << endl;
+    sumEvenOdd(arr, size);
+
+    cout << "\nCreating a zombie process:" << endl;
+    createZombieProcess();
+    sleep(5);
+
+    cout << "\nCreating an orphan process:" << endl;
+    createOrphanProcess();
+
+    return 0;
+}
+
+
+student database ==========================================================================================================================================================
+
+#!/bin/bash
+DB_FILE="student_database.txt"
+show_menu() {
+    echo "Select an operation:"
+    echo "a) Insert a record"
+    echo "b) Delete a record"
+    echo "c) Update a record"
+    echo "d) Search for a record"
+    echo "e) Exit"
+    read -p "Enter your choice: " choice
+}
+insert_record() {
+    read -p "Enter Student ID: " id
+    read -p "Enter Student Name: " name
+    read -p "Enter Student Grade: " grade
+    echo "$id,$name,$grade" >> "$DB_FILE"
+    echo "Record inserted successfully."
+}
+delete_record() {
+    read -p "Enter Student ID to delete: " id
+    if grep -q "^$id," "$DB_FILE"; then
+        grep -v "^$id," "$DB_FILE" > temp_file && mv temp_file "$DB_FILE"
+        echo "Record with ID $id deleted successfully."
+    else
+        echo "Record with ID $id not found."
+    fi
+}
+update_record() {
+    read -p "Enter Student ID to update: " id
+    if grep -q "^$id," "$DB_FILE"; then
+        read -p "Enter new Student Name: " name
+        read -p "Enter new Student Grade: " grade
+        grep -v "^$id," "$DB_FILE" > temp_file
+        echo "$id,$name,$grade" >> temp_file
+        mv temp_file "$DB_FILE"
+        echo "Record with ID $id updated successfully."
+    else
+        echo "Record with ID $id not found."
+    fi
+}
+search_record() {
+    read -p "Enter Student ID to search: " id
+    if grep -q "^$id," "$DB_FILE"; then
+        echo "Record found:"
+        grep "^$id," "$DB_FILE"
+    else
+        echo "Record with ID $id not found."
+    fi
+}
+while true; do
+    show_menu
+    case $choice in
+        a|A) insert_record ;;
+        b|B) delete_record ;;
+        c|C) update_record ;;
+        d|D) search_record ;;
+        e|E) echo "Exiting..."; exit 0 ;;
+        *) echo "Invalid option. Please try again." ;;
+    esac
+done
+
+
+file char and line ======================================================================================================================================================================
+
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+void copyFileCharacterByCharacter(const string& sourceFile, const string& destFile) {
+    ifstream src(sourceFile);
+    ofstream dest(destFile);
+    if (!src || !dest) {
+        cerr << "Error opening file" << endl;
+        exit(1);
+    }
+    char ch;
+    while (src.get(ch)) dest.put(ch);
+    cout << "File copied character by character successfully." << endl;
+}
+
+void copyFileLineByLine(const string& sourceFile, const string& destFile) {
+    ifstream src(sourceFile);
+    ofstream dest(destFile);
+    if (!src || !dest) {
+        cerr << "Error opening file" << endl;
+        exit(1);
+    }
+    string line;
+    while (getline(src, line)) dest << line << '\n';
+    cout << "File copied line by line successfully." << endl;
+}
+
+int main() {
+    // Hardcoded file names
+    string sourceFile = "source.txt";
+    string destFileChar = "dest_char_copy.txt";
+    string destFileLine = "dest_line_copy.txt";
+
+    cout << "\nCopying file character by character...\n";
+    copyFileCharacterByCharacter(sourceFile, destFileChar);
+
+    cout << "\nCopying file line by line...\n";
+    copyFileLineByLine(sourceFile, destFileLine);
+
+    return 0;
+}
+
+
+ALP program ===============================================================================================================================================================
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+void loadAlpToMemory(const string& filePath) {
+    vector<string> mainMemory;
+    ifstream file(filePath);
+
+    if (!file) {
+        cout << "Error: Input file not found." << endl;
+        return;
+    }
+
+    string line;
+    while (getline(file, line) && mainMemory.size() < 100) {
+        mainMemory.push_back(line);
+    }
+    file.close();
+
+    cout << "ALP Program loaded into main memory:" << endl;
+    for (int i = 0; i < mainMemory.size(); i++) {
+        cout << "Address " << i << ": " << mainMemory[i] << endl;
+    }
+}
+
+int main() {
+    loadAlpToMemory("alp_program.txt");
+    return 0;
+}
+
+
+opcode ====================================================================================================================================================================
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
+const vector<string> validOpcodes = {"LOAD", "STORE", "ADD", "SUB", "JMP", "HALT"};
+
+bool isValidOpcode(const string& opcode) {
+    for (const auto& validOpcode : validOpcodes) {
+        if (opcode == validOpcode) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void checkOpcodeErrors(const vector<string>& mainMemory) {
+    for (size_t i = 0; i < mainMemory.size(); i++) {
+        string opcode;
+        stringstream ss(mainMemory[i]);
+        ss >> opcode;  // Extract the first word as opcode
+        if (!isValidOpcode(opcode)) {
+            cout << "Opcode error at address " << i << ": Invalid opcode '" << opcode << "'" << endl;
+        }
+    }
+}
+
+int main() {
+    vector<string> mainMemory = {
+        "LOAD R1, 100",
+        "STOREE R2, 200",  // Invalid opcode for testing
+        "ADD R1, R2",
+        "INVALID_OP R3, 300"  // Invalid opcode for testing
+    };
+
+    checkOpcodeErrors(mainMemory);
+    return 0;
+}
+
+operand ===================================================================================================================================================================
+
+#include <iostream>
+#include <vector>
+#include <sstream>
+
+using namespace std;
+
+void checkOperandErrors(const vector<string>& mainMemory) {
+    for (size_t i = 0; i < mainMemory.size(); i++) {
+        int operandCount = 0;
+        stringstream ss(mainMemory[i]);
+        string token;
+
+        // Count tokens after the opcode as operands
+        while (getline(ss, token, ' ')) {
+            if (!token.empty()) {
+                operandCount++;
+            }
+        }
+
+        if (operandCount < 3) {  // Opcode + 2 operands
+            cout << "Operand error at address " << i << ": Missing operand(s) in instruction '" << mainMemory[i] << "'" << endl;
+        }
+    }
+}
+
+int main() {
+    vector<string> mainMemory = {
+        "LOAD R1, 100",
+        "STORE R2",  // Missing operand for testing
+        "ADD R1, R2",
+        "SUB R3"  // Missing operand for testing
+    };
+
+    checkOperandErrors(mainMemory);
+    return 0;
+}
+
+
+opcode operand ============================================================================================================================================================
+
+#include <iostream>
+#include <cstring>
+#include <cctype>  // For isdigit() function
+using namespace std;
+
+class Job {
+private:
+    char M[300][4];  // Memory (300 locations, each of 4 chars)
+    char IR[4];      // Instruction Register (4 chars)
+    int IC;          // Instruction Counter
+    int PI;          // Program Interrupt (PI = 1 for opcode error, PI = 2 for operand error)
+    int TTL;         // Time Limit (TTL) for the job
+
+public:
+    Job();  // Constructor
+    void LOAD();  // Load the job into memory
+    void EXECUTEUSERPROGRAM();  // Execute the user program
+    void MOS();  // Handle interrupts (in case of opcode or operand errors)
+    void TERMINATE();  // Terminate the job with an error message
+};
+
+// Constructor: Initializes all registers and memory
+Job::Job() {
+    IC = 0;
+    PI = 0;
+    TTL = 0;
+    memset(M, 0, sizeof(M));  // Initialize memory with zero
+    memset(IR, 0, sizeof(IR));  // Initialize IR with zero
+}
+
+// Load the job into memory (hardcoded job input in $AMJ format)
+void Job::LOAD() {
+    // Hardcoded job input in $AMJ format
+    string input[] = {
+        "$AMJ000100030001",  // Job ID = 0001, TTL = 0001, TLL = 0003
+        "GD10",  // Valid opcode with numeric operand
+        "PL10",  // Invalid operand (alphanumeric operand)
+        "H000",  // Valid opcode
+        "$END0001"  // End of job input
+    };
+
+    // Parse $AMJ line to initialize TTL
+    TTL = stoi(input[0].substr(4, 4));  // Get TTL from $AMJ line
+
+    // Store instructions in memory (skip the $AMJ and $END lines)
+    for (int i = 1; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            M[i-1][j] = input[i][j];  // Copy the instruction into memory
+        }
+    }
+}
+
+// Execute the user program and check for opcode and operand errors
+void Job::EXECUTEUSERPROGRAM() {
+    while (true) {
+        // Fetch the next instruction
+        for (int i = 0; i < 4; i++) {
+            IR[i] = M[IC][i];
+        }
+
+        // Display the instruction being executed
+        cout << "Executing Instruction: " << IR[0] << IR[1] << IR[2] << IR[3] << endl;
+
+        // Check for opcode error (invalid instruction)
+        if (IR[0] != 'G' && IR[0] != 'P' && IR[0] != 'L' && IR[0] != 'S' && IR[0] != 'C' && IR[0] != 'B') {
+            PI = 1;  // Opcode error
+            MOS();  // Raise interrupt for opcode error
+            break;
+        }
+
+        if (IR[1] != 'D' && IR[1] != 'R' && IR[1] != 'T') {
+            PI = 1;  // Opcode error
+            MOS();  // Raise interrupt for opcode error
+            break;
+        }
+
+        // Check for operand error (if the last two characters are not numeric)
+        if (!isdigit(IR[2]) || !isdigit(IR[3])) {
+            PI = 2;  // Operand error
+            MOS();  // Raise interrupt for operand error
+            break;
+        }
+
+        // Halt if instruction is 'H'
+        if (IR[0] == 'H') {
+            cout << "Halting execution as per 'H' instruction." << endl;
+            break;
+        }
+
+        IC++;  // Increment instruction counter
+    }
+}
+
+// Handle interrupts (in this case, opcode or operand error)
+void Job::MOS() {
+    if (PI == 1) {
+        TERMINATE();  // Terminate with opcode error
+    } else if (PI == 2) {
+        TERMINATE();  // Terminate with operand error
+    }
+}
+
+// Terminate the job with an error message
+void Job::TERMINATE() {
+    if (PI == 1) {
+        cout << "Error: Operation Code Error (PI = 1)" << endl;
+    } else if (PI == 2) {
+        cout << "Error: Operand Error (PI = 2)" << endl;
+    }
+    cout << "IC: " << IC << ", IR: " << IR[0] << IR[1] << IR[2] << IR[3] << endl;
+    cout << "TTL: " << TTL << endl;
+}
+
+int main() {
+    Job j;
+    j.LOAD();  // Load the job into memory
+    j.EXECUTEUSERPROGRAM();  // Start executing the user program
+    return 0;
+}
+
+
+
+
+LOAD ======================================================================================================================================================================
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <iomanip>
+
+using namespace std;
+
+const int MEMORY_SIZE = 100;
+const int WORD_SIZE = 4;
+vector<vector<char>> M(MEMORY_SIZE, vector<char>(WORD_SIZE, '-')); // Memory
+int IC;
+vector<char> IR(WORD_SIZE, '-'); // Instruction Register
+bool C;
+vector<char> R(WORD_SIZE, '-'); // General Purpose Register
+int indexForM;
+string buffer;
+bool flag1;
+bool flag2;
+int SI;
+string opcode;
+int operand;
+
+void INIT() {
+    // Initialize memory, instruction register, and other variables
+    for (auto &row : M)
+        fill(row.begin(), row.end(), '-');
+
+    fill(IR.begin(), IR.end(), '-');
+    fill(R.begin(), R.end(), '-');
+
+    IC = 0;
+    C = false;
+    buffer.clear();
+
+    SI = -1;
+    flag1 = false;
+    flag2 = false;
+    indexForM = 0;
+}
+
+void READ() {
+    IR[3] = '0';
+    getline(cin, buffer);
+    const char *array = buffer.c_str();
+    int indexForArray = 0;
+    bool flag = false;
+    int startingAddress = stoi(string(1, IR[2]) + string(1, IR[3]));
+    int endingAddress = startingAddress + 10;
+
+    for (int i = startingAddress; i < endingAddress; ++i) {
+        for (int j = 0; j < WORD_SIZE; ++j) {
+            M[i][j] = array[indexForArray];
+            indexForArray++;
+            if (indexForArray >= buffer.length()) {
+                flag = true;
+                break;
+            }
+        }
+        if (flag)
+            break;
+    }
+}
+
+void WRITE() {
+    IR[3] = '0';
+    stringstream ss;
+    int startingAddress = stoi(string(1, IR[2]) + string(1, IR[3]));
+    int endingAddress = startingAddress + 10;
+
+    for (int i = startingAddress; i < endingAddress; ++i) {
+        for (int j = 0; j < WORD_SIZE; ++j) {
+            if (M[i][j] == '-')
+                ss << " ";
+            else
+                ss << M[i][j];
+        }
+    }
+    ss << "\n";
+    cout << ss.str();
+}
+
+void TERMINATE() {
+    cout << "\n\n\n";
+    for (int k = 0; k < MEMORY_SIZE; ++k) {
+        cout << setw(2) << k << ": ";
+        for (const auto &ch : M[k])
+            cout << ch;
+        cout << endl;
+    }
+    cout << string(83, '-') << "Job Over" << string(83, '-') << endl;
+
+    INIT();
+    getline(cin, buffer);
+}
+
+void MOS() {
+    switch (SI) {
+    case 1:
+        READ();
+        break;
+    case 2:
+        WRITE();
+        break;
+    case 3:
+        TERMINATE();
+        break;
+    }
+}
+
+void LOAD() {
+    while (getline(cin, buffer)) {
+        if (buffer.length() >= 4) {
+            string first4CharOfInputLine = buffer.substr(0, 4);
+            if (first4CharOfInputLine == "$AMJ") {
+                flag1 = true;
+            } else if (first4CharOfInputLine == "$DTA") {
+                flag1 = true;
+            }
+            if (!flag1) {
+                const char *arrayOfBuffer = buffer.c_str();
+                int indexForArrayOfBuffer = 0;
+                int i = indexForM, j;
+                while (true) {
+                    for (j = 0; j < WORD_SIZE; ++j) {
+                        M[i][j] = arrayOfBuffer[indexForArrayOfBuffer];
+                        indexForArrayOfBuffer++;
+                        if (indexForArrayOfBuffer >= buffer.length()) {
+                            flag2 = true;
+                            break;
+                        }
+                    }
+                    if (flag2)
+                        break;
+                    i++;
+                }
+
+                i++;
+                indexForM = i;
+
+                if (indexForM == MEMORY_SIZE) {
+                    cerr << "No space, out of memory\nExiting......" << endl;
+                    exit(1);
+                }
+            }
+            flag2 = false;
+            flag1 = false;
+        }
+    }
+}
+
+int main() {
+    // Static input simulation
+    vector<string> inputLines = {
+        "$AMJ",
+        "Some data line that is more than four characters long",
+        "$DTA",
+        "Another line with some data",
+        "Last line of input"
+    };
+
+    stringstream inputStream;
+    for (const auto &line : inputLines)
+        inputStream << line << "\n";
+
+    cin.rdbuf(inputStream.rdbuf()); // Redirect cin to use the input simulation
+
+    INIT();
+    LOAD();
+
+    // Normally this would be the place where you can run MOS or other operations
+    // Example: MOS(); based on your specific logic
+    TERMINATE(); // Ending the process as an example
+
+    return 0;
+}
+
